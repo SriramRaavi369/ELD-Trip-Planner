@@ -13,7 +13,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
 
     // Fetch suggestions from backend
     const fetchSuggestions = async (query) => {
-        if (query.length < 2) {
+        if (!query || query.length < 2) {
             setSuggestions([])
             setShowDropdown(false)
             return
@@ -37,6 +37,13 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
         const newValue = e.target.value
         // Pass a synthetic-like event to parent
         onChange({ target: { name, value: newValue } })
+
+        if (!newValue || newValue.length < 2) {
+            setSuggestions([])
+            setShowDropdown(false)
+            if (debounceRef.current) clearTimeout(debounceRef.current)
+            return
+        }
 
         // Debounce the API call
         if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -115,7 +122,10 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
                 value={value}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                onFocus={() => { if (suggestions.length > 0) setShowDropdown(true) }}
+                onFocus={(e) => {
+                    e.target.select() // Select all text on click
+                    if (suggestions.length > 0 && value.length >= 2) setShowDropdown(true)
+                }}
                 required={required}
                 autoComplete="off"
                 disabled={disabled}
