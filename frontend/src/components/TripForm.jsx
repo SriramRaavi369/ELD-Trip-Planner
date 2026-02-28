@@ -20,6 +20,7 @@ function TripForm({ onSubmit, loading }) {
         start_time: getDefaultStartTime(),
     })
     const [useSystemTime, setUseSystemTime] = useState(true)
+    const [showValidation, setShowValidation] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -31,6 +32,11 @@ function TripForm({ onSubmit, loading }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!isValid) {
+            setShowValidation(true)
+            return
+        }
+        setShowValidation(false)
         onSubmit(formData)
     }
 
@@ -61,6 +67,7 @@ function TripForm({ onSubmit, loading }) {
                         onChange={handleChange}
                         required
                         disabled={loading}
+                        error={showValidation && !formData.current_location.trim()}
                     />
                 </div>
 
@@ -76,6 +83,7 @@ function TripForm({ onSubmit, loading }) {
                         onChange={handleChange}
                         required
                         disabled={loading}
+                        error={showValidation && !formData.pickup_location.trim()}
                     />
                 </div>
 
@@ -91,6 +99,7 @@ function TripForm({ onSubmit, loading }) {
                         onChange={handleChange}
                         required
                         disabled={loading}
+                        error={showValidation && !formData.dropoff_location.trim()}
                     />
                 </div>
             </div>
@@ -198,8 +207,8 @@ function TripForm({ onSubmit, loading }) {
 
             <button
                 type="submit"
-                className="btn-submit"
-                disabled={loading || !isValid}
+                className={`btn-submit ${!isValid && !loading ? 'btn-invalid' : ''}`}
+                disabled={loading}
                 style={{ marginTop: '1rem' }}
             >
                 {loading ? (
@@ -213,6 +222,12 @@ function TripForm({ onSubmit, loading }) {
                     </div>
                 )}
             </button>
+
+            {showValidation && !isValid && (
+                <div className="validation-error">
+                    <span>⚠️</span> Please fill in all location details to proceed further
+                </div>
+            )}
         </form>
     )
 }

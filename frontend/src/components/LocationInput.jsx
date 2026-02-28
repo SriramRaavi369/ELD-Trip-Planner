@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
-function LocationInput({ id, name, value, onChange, placeholder, required, disabled }) {
+function LocationInput({ id, name, value, onChange, placeholder, required, disabled, error }) {
     const [suggestions, setSuggestions] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -131,7 +131,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
                 id={id}
                 name={name}
                 type="text"
-                className="form-input"
+                className={`form-input ${error ? 'input-invalid' : ''}`}
                 placeholder={placeholder}
                 value={value}
                 onChange={handleInputChange}
