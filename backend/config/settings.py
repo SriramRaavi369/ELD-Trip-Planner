@@ -5,12 +5,13 @@ Django settings for Spotter AI ELD Trip Planner.
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+import os
 
-SECRET_KEY = 'django-insecure-spotter-ai-dev-key-change-in-production'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-spotter-ai-dev-key-change-in-production')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] # Allowed for Render and Vercel testing
 
 INSTALLED_APPS = [
     'django.contrib.admin',
