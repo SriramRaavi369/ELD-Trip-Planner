@@ -422,11 +422,11 @@ function ELDLogSheet({ log, dayNumber, stops, onPrevDay, onNextDay, hasPrev, has
                     ◀
                 </button>
 
-                <div className="eld-grid-container" style={{ flex: 1, margin: 0, overflowX: 'auto' }}>
+                <div className="eld-grid-container" style={{ flex: 1, margin: 0 }}>
                     <canvas
                         ref={canvasRef}
+                        className="eld-canvas"
                         style={{
-                            minWidth: '800px',
                             borderRadius: '8px',
                             border: '1px solid #ddd',
                         }}

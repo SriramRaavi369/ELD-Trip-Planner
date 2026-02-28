@@ -254,8 +254,8 @@
 }
 
 .time-toggle-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+    font-size: 0.85rem;
+    color: #cbd5e1;
     font-weight: 500;
 }
 
@@ -314,13 +314,27 @@
 
 /* Theme Toggle Special Styling */
 .toggle-switch.theme-toggle .slider {
-    border-color: #fbbf24;
-    /* Gold */
+    border-color: #334155;
+    background-color: #1e293b;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .toggle-switch.theme-toggle input:checked+.slider {
-    border-color: #fbbf24;
-    /* Keep gold in light mode too */
+    border-color: #2563eb;
+    background-color: #3b82f6;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch.theme-toggle .slider:before {
+    background-color: #94a3b8;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.toggle-switch.theme-toggle input:checked+.slider:before {
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Location Autocomplete */
@@ -832,7 +846,7 @@
     font-family: 'Inter', Arial, sans-serif;
     padding: 20px;
     border-radius: var(--radius-md);
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 .eld-log-title {
@@ -880,7 +894,11 @@
 /* ELD Grid */
 .eld-grid-container {
     margin: 16px 0;
-    overflow-x: auto;
+}
+
+.eld-canvas {
+    max-width: 100%;
+    display: block;
 }
 
 .eld-grid {
@@ -1002,6 +1020,7 @@
     padding: 12px;
     background: #f8f9fa;
     border-radius: 6px;
+    flex-wrap: wrap;
 }
 
 .eld-total-item {
@@ -1718,7 +1737,7 @@
 
 /* Log Details Form */
 .log-details-form {
-    margin: 2rem 0;
+    margin: 2rem 0 1rem 0;
     padding: 2rem;
     border: 1px solid var(--border-color);
     background: var(--bg-card);
@@ -1974,5 +1993,16 @@
     .mobile-tab-logs .loading-card,
     .mobile-tab-logs .trip-summary-section {
         display: none !important;
+    }
+
+    /* Isolate Horizontal Scrolling to Mobile */
+    .eld-grid-container {
+        overflow-x: auto;
+        min-width: 0;
+    }
+
+    .eld-canvas {
+        min-width: 800px;
+        max-width: none;
     }
 }

@@ -179,14 +179,14 @@ function App() {
                         <Truck size={24} color="white" />
                     </div>
                     <div>
-                        <h1>Spotter AI</h1>
-                        <span>ELD Trip Planner</span>
+                        <h1>ELD Trip Planner</h1>
+                        <span>by Spotter AI</span>
                     </div>
                 </div>
                 <div className="header-controls">
                     <label className="time-toggle" title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}>
-                        <span className="time-toggle-label" style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            {theme === 'dark' ? <><Moon size={14} /> Dark</> : <><Sun size={14} /> Light</>}
+                        <span className="time-toggle-label" style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            {theme === 'dark' ? <>🌙 Dark</> : <>☀️ Light</>}
                         </span>
                         <div className="toggle-switch theme-toggle">
                             <input
