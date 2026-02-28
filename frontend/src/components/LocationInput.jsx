@@ -10,6 +10,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
     const [highlightIndex, setHighlightIndex] = useState(-1)
     const wrapperRef = useRef(null)
     const debounceRef = useRef(null)
+    const activeFetchRef = useRef(0)
 
     // Fetch suggestions from backend
     const fetchSuggestions = async (query) => {
@@ -19,16 +20,25 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
             return
         }
 
+        const fetchId = Date.now()
+        activeFetchRef.current = fetchId
+
         setLoading(true)
         try {
             const resp = await axios.get(`${API_BASE_URL}/api/autocomplete/`, { params: { q: query } })
-            setSuggestions(resp.data || [])
-            setShowDropdown(true)
-            setHighlightIndex(-1)
+            if (activeFetchRef.current === fetchId) {
+                setSuggestions(resp.data || [])
+                setShowDropdown(true)
+                setHighlightIndex(-1)
+            }
         } catch {
-            setSuggestions([])
+            if (activeFetchRef.current === fetchId) {
+                setSuggestions([])
+            }
         } finally {
-            setLoading(false)
+            if (activeFetchRef.current === fetchId) {
+                setLoading(false)
+            }
         }
     }
 
@@ -39,6 +49,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
         onChange({ target: { name, value: newValue } })
 
         if (!newValue || newValue.length < 2) {
+            activeFetchRef.current = 0
             setSuggestions([])
             setShowDropdown(false)
             if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -54,6 +65,9 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
 
     // Select a suggestion
     const handleSelect = (suggestion) => {
+        if (debounceRef.current) clearTimeout(debounceRef.current)
+        activeFetchRef.current = 0 // Cancel any in-flight fetches
+
         // Shorten the display name (take first 2-3 parts)
         const parts = suggestion.display_name.split(', ')
         const shortName = parts.length > 2 ? parts.slice(0, 3).join(', ') : suggestion.display_name
