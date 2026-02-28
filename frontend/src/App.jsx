@@ -8,10 +8,14 @@ import StopsTimeline from './components/StopsTimeline'
 import ELDLogSheet from './components/ELDLogSheet'
 import PaperLogSheet from './components/PaperLogSheet'
 import LogDetailsForm from './components/LogDetailsForm'
+import axios from 'axios'
+import html2canvas from 'html2canvas'
+import { generateTripPDF, createDriverData } from './utils/pdfGenerator'
 import './App.css'
 import './Preview.css'
-import { generateTripPDF } from './utils/pdfGenerator'
 import LoadingAnimation from './components/LoadingAnimation'
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 const LOADING_MESSAGES = [
     { icon: '📍', text: 'Geocoding locations...' },
@@ -125,7 +129,7 @@ function App() {
         try {
             // Keep the previous data visible underneath if desired, or clear it
             // We'll clear it for a clean sweep when the new data arrives
-            const response = await axios.post('/api/trip-plan/', formData)
+            const response = await axios.post(`${API_BASE_URL}/api/trip-plan/`, formData)
 
             // Ensure minimum 2 seconds of zoom animation so it actually drives towards the screen
             const elapsed = Date.now() - animationStartTime;

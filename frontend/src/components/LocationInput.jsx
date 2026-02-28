@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
 function LocationInput({ id, name, value, onChange, placeholder, required }) {
     const [suggestions, setSuggestions] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
@@ -19,7 +21,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required }) {
 
         setLoading(true)
         try {
-            const resp = await axios.get('/api/autocomplete/', { params: { q: query } })
+            const resp = await axios.get(`${API_BASE_URL}/api/autocomplete/`, { params: { q: query } })
             setSuggestions(resp.data || [])
             setShowDropdown(true)
             setHighlightIndex(-1)
