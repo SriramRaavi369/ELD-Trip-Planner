@@ -207,7 +207,7 @@ function TripForm({ onSubmit, loading }) {
 
             <button
                 type="submit"
-                className={`btn-submit ${!isValid && !loading ? 'btn-invalid' : ''}`}
+                className={`btn-submit ${isValid && !loading ? 'btn-glow' : ''}`}
                 disabled={loading}
                 style={{ marginTop: '1rem' }}
             >

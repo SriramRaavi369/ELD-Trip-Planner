@@ -240,15 +240,23 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-invalid {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 2px solid var(--accent-primary) !important;
-    color: var(--accent-primary) !important;
-    box-shadow: none !important;
+.btn-glow {
+    box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(59, 130, 246, 0.2);
+    animation: pulse-glow 2s infinite;
 }
 
-.btn-invalid:hover {
-    background: rgba(59, 130, 246, 0.05) !important;
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 30px var(--accent-glow), 0 0 50px rgba(59, 130, 246, 0.3);
+    }
+
+    100% {
+        box-shadow: 0 0 15px var(--accent-glow);
+    }
 }
 
 .input-invalid {
