@@ -241,8 +241,14 @@
 }
 
 .btn-invalid {
-    background: var(--accent-gradient) !important;
-    box-shadow: 0 4px 15px var(--accent-glow);
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 2px solid var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    box-shadow: none !important;
+}
+
+.btn-invalid:hover {
+    background: rgba(59, 130, 246, 0.05) !important;
 }
 
 .input-invalid {
