@@ -11,12 +11,23 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
     const wrapperRef = useRef(null)
     const debounceRef = useRef(null)
     const activeFetchRef = useRef(0)
+    const searchCacheRef = useRef({}) // Query cache for instant results
 
     // Fetch suggestions from backend
     const fetchSuggestions = async (query) => {
         if (!query || query.length < 2) {
             setSuggestions([])
             setShowDropdown(false)
+            return
+        }
+
+        // Check local cache first for instant results
+        const normalizedQuery = query.toLowerCase().trim()
+        if (searchCacheRef.current[normalizedQuery]) {
+            setSuggestions(searchCacheRef.current[normalizedQuery])
+            setShowDropdown(true)
+            setHighlightIndex(-1)
+            setLoading(false)
             return
         }
 
@@ -27,9 +38,12 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
         try {
             const resp = await axios.get(`${API_BASE_URL}/api/autocomplete/`, { params: { q: query } })
             if (activeFetchRef.current === fetchId) {
-                setSuggestions(resp.data || [])
+                const results = resp.data || []
+                setSuggestions(results)
                 setShowDropdown(true)
                 setHighlightIndex(-1)
+                // Save to cache
+                searchCacheRef.current[normalizedQuery] = results
             }
         } catch {
             if (activeFetchRef.current === fetchId) {
@@ -56,11 +70,21 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
             return
         }
 
+        // Check cache for instant UI response before debouncing
+        const normalizedQuery = newValue.toLowerCase().trim()
+        if (searchCacheRef.current[normalizedQuery]) {
+            if (debounceRef.current) clearTimeout(debounceRef.current)
+            setSuggestions(searchCacheRef.current[normalizedQuery])
+            setShowDropdown(true)
+            setHighlightIndex(-1)
+            return
+        }
+
         // Debounce the API call
         if (debounceRef.current) clearTimeout(debounceRef.current)
         debounceRef.current = setTimeout(() => {
             fetchSuggestions(newValue)
-        }, 300)
+        }, 150) // Reduced from 300ms to 150ms for faster feel
     }
 
     // Select a suggestion
