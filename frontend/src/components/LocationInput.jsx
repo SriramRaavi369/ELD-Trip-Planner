@@ -21,7 +21,6 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
             return
         }
 
-        // Check local cache first for instant results
         const normalizedQuery = query.toLowerCase().trim()
         if (searchCacheRef.current[normalizedQuery]) {
             setSuggestions(searchCacheRef.current[normalizedQuery])
@@ -36,16 +35,41 @@ function LocationInput({ id, name, value, onChange, placeholder, required, disab
 
         setLoading(true)
         try {
-            const resp = await axios.get(`${API_BASE_URL}/api/autocomplete/`, { params: { q: query } })
+            // CALL PHOTON DIRECTLY FOR MAXIMUM SPEED
+            // Remove the backend middleman (Render) which is slow
+            const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=7&lang=en&bbox=-125.0,24.39,-66.93,49.38`
+            const resp = await axios.get(photonUrl)
+
             if (activeFetchRef.current === fetchId) {
-                const results = resp.data || []
+                const results = (resp.data.features || []).map(feature => {
+                    const props = feature.properties
+                    const coords = feature.geometry.coordinates
+
+                    // Format display name identically to backend implementation
+                    const name = props.name || ""
+                    const city = props.city || ""
+                    const state = props.state || ""
+                    const country = props.country || ""
+
+                    const uniqueParts = []
+                    for (const p of [name, city, state, country]) {
+                        if (p && !uniqueParts.includes(p)) uniqueParts.push(p)
+                    }
+
+                    return {
+                        display_name: uniqueParts.join(', ') || props.name || "Unknown",
+                        lat: coords[1],
+                        lng: coords[0]
+                    }
+                })
+
                 setSuggestions(results)
                 setShowDropdown(true)
                 setHighlightIndex(-1)
-                // Save to cache
                 searchCacheRef.current[normalizedQuery] = results
             }
-        } catch {
+        } catch (err) {
+            console.error("Autocomplete error:", err)
             if (activeFetchRef.current === fetchId) {
                 setSuggestions([])
             }
