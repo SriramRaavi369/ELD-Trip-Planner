@@ -59,3 +59,6 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Spotter AI Local Agent Data
+.agents/
