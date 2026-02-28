@@ -60,6 +60,7 @@ function TripForm({ onSubmit, loading }) {
                         value={formData.current_location}
                         onChange={handleChange}
                         required
+                        disabled={loading}
                     />
                 </div>
 
@@ -74,6 +75,7 @@ function TripForm({ onSubmit, loading }) {
                         value={formData.pickup_location}
                         onChange={handleChange}
                         required
+                        disabled={loading}
                     />
                 </div>
 
@@ -88,6 +90,7 @@ function TripForm({ onSubmit, loading }) {
                         value={formData.dropoff_location}
                         onChange={handleChange}
                         required
+                        disabled={loading}
                     />
                 </div>
             </div>
@@ -105,6 +108,7 @@ function TripForm({ onSubmit, loading }) {
                                 <input
                                     type="checkbox"
                                     checked={useSystemTime}
+                                    disabled={loading}
                                     onChange={(e) => {
                                         const checked = e.target.checked
                                         setUseSystemTime(checked)
@@ -132,7 +136,7 @@ function TripForm({ onSubmit, loading }) {
                         className={`form-input ${useSystemTime ? 'input-disabled' : ''}`}
                         value={formData.start_time}
                         onChange={handleChange}
-                        disabled={useSystemTime}
+                        disabled={useSystemTime || loading}
                     />
                     <div className="form-hint">
                         {useSystemTime
@@ -153,6 +157,7 @@ function TripForm({ onSubmit, loading }) {
                             <button
                                 type="button"
                                 className="cycle-btn"
+                                disabled={loading}
                                 onClick={() => setFormData(prev => ({
                                     ...prev,
                                     current_cycle_used: Math.max(0, prev.current_cycle_used - 0.5)
@@ -161,6 +166,7 @@ function TripForm({ onSubmit, loading }) {
                             <button
                                 type="button"
                                 className="cycle-btn"
+                                disabled={loading}
                                 onClick={() => setFormData(prev => ({
                                     ...prev,
                                     current_cycle_used: Math.min(70, prev.current_cycle_used + 0.5)
@@ -183,6 +189,7 @@ function TripForm({ onSubmit, loading }) {
                     step="0.5"
                     value={formData.current_cycle_used}
                     onChange={handleChange}
+                    disabled={loading}
                 />
                 <div className="form-hint">
                     Hours used in current 70-hour/8-day cycle

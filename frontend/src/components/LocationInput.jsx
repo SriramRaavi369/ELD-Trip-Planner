@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
-function LocationInput({ id, name, value, onChange, placeholder, required }) {
+function LocationInput({ id, name, value, onChange, placeholder, required, disabled }) {
     const [suggestions, setSuggestions] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -118,6 +118,7 @@ function LocationInput({ id, name, value, onChange, placeholder, required }) {
                 onFocus={() => { if (suggestions.length > 0) setShowDropdown(true) }}
                 required={required}
                 autoComplete="off"
+                disabled={disabled}
             />
             {loading && <div className="autocomplete-loading">⟳</div>}
 

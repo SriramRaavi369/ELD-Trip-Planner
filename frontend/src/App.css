@@ -232,7 +232,9 @@
     margin-top: 4px;
 }
 
-.input-disabled {
+.input-disabled,
+.form-input:disabled,
+.location-input-wrapper input:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     background: rgba(255, 255, 255, 0.05);
